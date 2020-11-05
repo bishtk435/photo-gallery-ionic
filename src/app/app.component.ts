@@ -15,6 +15,7 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar
   ) {
+    console.log('this is platform object: ', this.platform.pause.closed);
     this.initializeApp();
   }
 

@@ -9,4 +9,16 @@ export class TabsPage {
 
   constructor() {}
 
+  // ionicViewWillEnter(): void {
+  //   console.log('tabs: viewWillEnter');
+  // }
+
+  ionViewWillEnter() {
+    console.log('tabs: viewWillEnter');
+  }
+
+  ionicViewWillEnter(): void {
+    console.log('tabs: ionicViewWillEnter');
+  }
+
 }

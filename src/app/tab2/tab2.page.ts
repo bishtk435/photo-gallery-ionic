@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PhotoService } from '../services/photo.service';
+import { ActionSheetController } from '@ionic/angular';
+
+import { Photo, PhotoService } from '../services/photo.service';
 
 @Component({
   selector: 'app-tab2',
@@ -8,7 +10,7 @@ import { PhotoService } from '../services/photo.service';
 })
 export class Tab2Page implements OnInit {
 
-  constructor(private photoService: PhotoService) {}
+  constructor(private photoService: PhotoService, private actionSheetController: ActionSheetController) {}
 
   addPhotoToGallery() {
     this.photoService.addNewToGallery();
@@ -16,6 +18,45 @@ export class Tab2Page implements OnInit {
 
   async ngOnInit() {
     await this.photoService.loadSaved();
+    console.log('tab2: ngOnInit');
+  }
+
+  ionViewWillEnter() {
+    console.log('tab2: ionViewWillEnter');
+  }
+
+  ionViewDidEnter() {
+    console.log('tab2: ionViewDidEnter');
+  }
+
+  ionViewWillLeave() {
+    console.log('tab2: ionViewWillLeave');
+  }
+
+  ionViewDidLeave() {
+    console.log('tab2: ionViewDidLeave');
+  }
+
+  public async showActionSheet(photo: Photo, position: number) {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Photos',
+      buttons: [{
+        text: 'Delete',
+        role: 'destructive',
+        icon: 'trash',
+        handler: () => {
+          this.photoService.deletePicture(photo, position);
+        }
+      }, {
+        text: 'Cancel',
+        icon: 'Close',
+        role: 'cancel',
+        handler: () => {
+
+        }
+      }]
+    });
+    await actionSheet.present();
   }
 
 }

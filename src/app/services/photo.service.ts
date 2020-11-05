@@ -76,7 +76,6 @@ export class PhotoService {
     }else{
       const response = await fetch(cameraPhoto.webPath);
       const blob = await response.blob();
-  
       return await this.convertBlobToBase64(blob) as string;
     }
   }
@@ -95,14 +94,32 @@ export class PhotoService {
     this.photos = JSON.parse(photoList.value) || [];
 
     if (this.platform.is('hybrid')){
-      for (let photo of this.photos) {
+      for (const photo of this.photos) {
         const readFile = await Filesystem.readFile({
           path: photo.filePath,
           directory: FilesystemDirectory.Data
         });
+        console.log('this is read file: ', readFile);
         photo.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
       }
     }
+  }
+
+  public async deletePicture(photo: Photo, position: number){
+    this.photos.slice(position, 1);
+
+    Storage.set({
+      key: this.PHOTO_STORAGE,
+      value: JSON.stringify(this.photos)
+    });
+
+    const fileName = photo.filePath
+                        .substr(photo.filePath.lastIndexOf('/') + 1);
+
+    await Filesystem.deleteFile({
+      path: fileName,
+      directory: FilesystemDirectory.Data
+    });
   }
 }
 
